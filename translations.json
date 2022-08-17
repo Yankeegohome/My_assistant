@@ -43,22 +43,6 @@
     "ru": "Не могу найти в Википедии ничего по запросу {}. Но вот, что мне удалось найти в Гугл",
     "en": "Can't find {} on Wikipedia. But here is what I found on google"
   },
-  "It is {0} in {1}": {
-    "ru": "Сейчас {0} в городе {1}",
-    "en": "It is {0} in {1}"
-  },
-  "The temperature is {} degrees Celsius": {
-    "ru": "Температура {} градусов Цельсия",
-    "en": "The temperature is {} degrees Celsius"
-  },
-  "The wind speed is {} meters per second": {
-    "ru": "Скорость ветра {} метров в секунду",
-    "en": "The wind speed is {} meters per second"
-  },
-  "The pressure is {} mm Hg": {
-    "ru": "Давление {} миллиметров ртутного столба",
-    "en": "The pressure is {} mm Hg"
-  },
   "Here is what I found for {} on social nets": {
     "ru": "Вот, что мне удалось найти по запросу {} в социальных сетях",
     "en": "Here is what I found for {} on social nets"

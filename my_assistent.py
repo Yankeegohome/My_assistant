@@ -203,85 +203,6 @@ def search_for_definition_on_wikipedia(*args: tuple):
         return
 
 
-def get_translation(*args: tuple):
-
-    if not args[0]: return
-
-    search_term = " ".join(args[0])
-    google_translator = googletrans.Translator()
-    translation_result = ""
-
-    old_assistant_language = assistant.speech_language
-    try:
-
-        if assistant.speech_language != person.native_language:
-            translation_result = google_translator.translate(search_term,  # что перевести
-                                                             src=person.target_language,  # с какого языка
-                                                             dest=person.native_language)  # на какой язык
-
-            play_voice_assistant_speech("The translation for {} in Russian is".format(search_term))
-
-            assistant.speech_language = person.native_language
-            setup_assistant_voice()
-
-        else:
-            translation_result = google_translator.translate(search_term,  # что перевести
-                                                             src=person.native_language,  # с какого языка
-                                                             dest=person.target_language)  # на какой язык
-            play_voice_assistant_speech("По-английски {} будет как".format(search_term))
-
-            assistant.speech_language = person.target_language
-            setup_assistant_voice()
-
-        play_voice_assistant_speech(translation_result.text)
-
-    except:
-        play_voice_assistant_speech(translator.get("Seems like we have a trouble. See logs for more information"))
-        traceback.print_exc()
-
-    finally:
-
-        assistant.speech_language = old_assistant_language
-        setup_assistant_voice()
-
-
-def get_weather_forecast(*args: tuple):
-
-    if args[0]:
-        city_name = args[0][0]
-    else:
-        city_name = person.home_city
-
-    try:
-
-        weather_api_key = os.getenv("WEATHER_API_KEY")
-        open_weather_map = OWM(weather_api_key)
-
-        weather_manager = open_weather_map.weather_manager()
-        observation = weather_manager.weather_at_place(city_name)
-        weather = observation.weather
-
-    except:
-        play_voice_assistant_speech(translator.get("Seems like we have a trouble. See logs for more information"))
-        traceback.print_exc()
-        return
-
-    status = weather.detailed_status
-    temperature = weather.temperature('celsius')["temp"]
-    wind_speed = weather.wind()["speed"]
-    pressure = int(weather.pressure["press"] / 1.333)  # переведено из гПА в мм рт.ст.
-
-    print(colored("Weather in " + city_name +
-                  ":\n * Status: " + status +
-                  "\n * Wind speed (m/sec): " + str(wind_speed) +
-                  "\n * Temperature (Celsius): " + str(temperature) +
-                  "\n * Pressure (mm Hg): " + str(pressure), "yellow"))
-
-    play_voice_assistant_speech(translator.get("It is {0} in {1}").format(status, city_name))
-    play_voice_assistant_speech(translator.get("The temperature is {} degrees Celsius").format(str(temperature)))
-    play_voice_assistant_speech(translator.get("The wind speed is {} meters per second").format(str(wind_speed)))
-    play_voice_assistant_speech(translator.get("The pressure is {} mm Hg").format(str(pressure)))
-
 
 def change_language(*args: tuple):
 
@@ -339,9 +260,7 @@ commands = {
     ("search", "google", "find", "найди"): search_for_term_on_google,
     ("video", "youtube", "watch", "видео"): search_for_video_on_youtube,
     ("wikipedia", "definition", "about", "определение", "википедия"): search_for_definition_on_wikipedia,
-    ("translate", "interpretation", "translation", "перевод", "перевести", "переведи"): get_translation,
     ("language", "язык"): change_language,
-    ("weather", "forecast", "погода", "прогноз"): get_weather_forecast,
     ("facebook", "person", "run", "пробей", "контакт"): run_person_through_social_nets_databases,
     ("toss", "coin", "монета", "подбрось"): toss_coin,
 }
